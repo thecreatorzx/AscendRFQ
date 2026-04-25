@@ -1,0 +1,257 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum UserRole {
+  ADMIN
+  BUYER
+  SUPPLIER
+}
+
+enum AuctionStatus {
+  DRAFT
+  ACTIVE
+  CLOSED
+  FORCED_CLOSED
+}
+
+enum SupplierStatus {
+  INVITED
+  ACCEPTED
+  REJECTED
+}
+
+enum ExtensionTriggerType {
+  BID_RECEIVED
+  ANY_RANK_CHANGE
+  L1_CHANGE
+}
+
+enum BidSource {
+  MANUAL
+  AUTO
+}
+
+enum BidStatus {
+  VALID
+  REJECTED
+}
+
+enum ActivityEventType {
+  BID_PLACED
+  EXTENSION_TRIGGERED
+  AUCTION_CLOSED
+  AUCTION_FORCED_CLOSED
+  ERROR
+}
+
+enum ActivityEventCategory {
+  BID
+  SYSTEM
+  EXTENSION
+  AUCTION
+}
+
+enum ActorType {
+  SYSTEM
+  BUYER
+  SUPPLIER
+  ADMIN
+}
+
+enum CompanyType {
+  BUYER
+  SUPPLIER
+}
+
+enum NotificationType {
+  INVITATION
+  STATUS_CHANGE
+  OUTBID
+  AUCTION_EXTENDED
+  AUCTION_CLOSED
+}
+
+enum Currency {
+  INR
+  USD
+  EUR
+}
+
+enum QuoteStatus {
+  ACTIVE
+  EXPIRED
+}
+
+model Company {
+  id        String      @id @default(uuid())
+  name      String
+  type      CompanyType
+  createdAt DateTime    @default(now())
+  users     User[]
+}
+
+model User {
+  id            String         @id @default(uuid())
+  name          String
+  email         String         @unique
+  password      String
+  role          UserRole       @default(BUYER)
+  companyId     String
+  company       Company        @relation(fields: [companyId], references: [id], onDelete: Restrict)
+  createdAt     DateTime       @default(now())
+  lastLogin     DateTime?
+  rfqs          RFQ[]
+  bids          Bid[]
+  quotes        Quote[]
+  rfqsuppliers  RFQSupplier[]
+  // bidRankings  BidRanking[] // computed internally for now
+  notifications Notification[]
+}
+
+model RFQ {
+  id              String             @id @default(uuid())
+  name            String
+  buyerId         String
+  buyer           User               @relation(fields: [buyerId], references: [id], onDelete: Restrict)
+  startTime       DateTime
+  bidCloseTime    DateTime
+  forcedCloseTime DateTime
+  currentEndTime  DateTime
+  status          AuctionStatus
+  initialPrice    Decimal
+  currency        Currency
+  config          AuctionConfig?
+  bids            Bid[]
+  suppliers       RFQSupplier[]
+  quotes          Quote[]
+  activityLogs    ActivityLog[]
+  extensions      AuctionExtension[]
+
+  pickupDate    DateTime
+  // bidRankings BidRanking[]  // Computed internally for now
+  notifications Notification[]
+
+  @@index([status, currentEndTime])
+}
+
+model AuctionConfig {
+  id                String               @id @default(uuid())
+  rfqId             String               @unique
+  rfq               RFQ                  @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  extensionWindow   Int
+  extensionDuration Int
+  maxExtensions     Int?
+  extensionType     ExtensionTriggerType
+  minDecrement      Float
+  extensionEnabled  Boolean
+  autoBidEnabled    Boolean
+  createdAt         DateTime             @default(now())
+  updatedAt         DateTime             @updatedAt
+}
+
+model RFQSupplier {
+  id             String         @id @default(uuid())
+  rfqId          String
+  supplierId     String
+  rfq            RFQ            @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  supplier       User           @relation(fields: [supplierId], references: [id])
+  status         SupplierStatus
+  lastActivityAt DateTime?
+
+  @@unique([rfqId, supplierId])
+}
+
+model Bid {
+  bidId      String    @id @default(uuid())
+  rfqId      String
+  supplierId String
+  rfq        RFQ       @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  supplier   User      @relation(fields: [supplierId], references: [id])
+  bidAmount  Decimal
+  bidSource  BidSource
+  quote      Quote?
+  status     BidStatus
+  createdAt  DateTime  @default(now())
+
+  @@index([rfqId, bidAmount])
+}
+
+// ------------------ FOR NOW THE BID RANKING WILL BE DIRECTLY COMPUTED INTERNALLY
+
+// model BidRanking {
+//   id          String   @id @default(uuid())
+//   rfqId       String
+//   supplierId  String
+//   rfq         RFQ      @relation(fields: [rfqId], references: [id])           
+//   supplier    User     @relation(fields: [supplierId], references: [id])
+//   currentRank Int
+//   updatedAt   DateTime @default(now())
+// }
+
+model Quote {
+  id                 String      @id @default(uuid())
+  carrierName        String
+  bidId              String      @unique
+  bid                Bid         @relation(fields: [bidId], references: [bidId], onDelete: Cascade)
+  freightCharges     Decimal
+  originCharges      Decimal
+  destinationCharges Decimal
+  transitTime        Int
+  validityDate       DateTime
+  status             QuoteStatus
+  versionNumber      Int
+  isLatest           Boolean
+  createdAt          DateTime    @default(now())
+  user               User?       @relation(fields: [userId], references: [id])
+  userId             String?
+  rfq                RFQ?        @relation(fields: [rfqId], references: [id])
+  rfqId              String?
+}
+
+model ActivityLog {
+  id            String                @id @default(uuid())
+  rfqId         String
+  rfq           RFQ                   @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  eventType     ActivityEventType
+  eventCategory ActivityEventCategory
+  actorId       String?
+  actorType     ActorType
+  correlationId String?
+  oldValue      Json?
+  newValue      Json?
+  metadata      Json?
+  createdAt     DateTime              @default(now())
+
+  @@index([rfqId, createdAt])
+}
+
+model AuctionExtension {
+  id          String               @id @default(uuid())
+  rfqId       String
+  rfq         RFQ                  @relation(fields: [rfqId], references: [id], onDelete: Cascade)
+  triggerType ExtensionTriggerType
+  triggerTime DateTime
+  oldEndTime  DateTime
+  newEndTime  DateTime
+}
+
+model Notification {
+  id        String           @id @default(uuid())
+  userId    String
+  user      User             @relation(fields: [userId], references: [id])
+  rfqId     String?
+  rfq       RFQ?             @relation(fields: [rfqId], references: [id], onDelete: SetNull)
+  type      NotificationType
+  title     String
+  message   String
+  isRead    Boolean          @default(false)
+  metadata  Json?
+  createdAt DateTime         @default(now())
+
+  @@index([userId, isRead])
+}
