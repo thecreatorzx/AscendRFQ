@@ -105,9 +105,8 @@ model User {
   company       Company        @relation(fields: [companyId], references: [id], onDelete: Restrict)
   createdAt     DateTime       @default(now())
   lastLogin     DateTime?
-  rfqs          RFQ[]
+  rfqsCreated   RFQ[]
   bids          Bid[]
-  quotes        Quote[]
   rfqsuppliers  RFQSupplier[]
   // bidRankings  BidRanking[] // computed internally for now
   notifications Notification[]
@@ -128,7 +127,6 @@ model RFQ {
   config          AuctionConfig?
   bids            Bid[]
   suppliers       RFQSupplier[]
-  quotes          Quote[]
   activityLogs    ActivityLog[]
   extensions      AuctionExtension[]
 
@@ -147,7 +145,7 @@ model AuctionConfig {
   extensionDuration Int
   maxExtensions     Int?
   extensionType     ExtensionTriggerType
-  minDecrement      Float
+  minDecrement      Decimal
   extensionEnabled  Boolean
   autoBidEnabled    Boolean
   createdAt         DateTime             @default(now())
@@ -178,7 +176,7 @@ model Bid {
   status     BidStatus
   createdAt  DateTime  @default(now())
 
-  @@index([rfqId, bidAmount])
+  @@index([rfqId, bidAmount, createdAt])
 }
 
 // ------------------ FOR NOW THE BID RANKING WILL BE DIRECTLY COMPUTED INTERNALLY
@@ -207,10 +205,6 @@ model Quote {
   versionNumber      Int
   isLatest           Boolean
   createdAt          DateTime    @default(now())
-  user               User?       @relation(fields: [userId], references: [id])
-  userId             String?
-  rfq                RFQ?        @relation(fields: [rfqId], references: [id])
-  rfqId              String?
 }
 
 model ActivityLog {
@@ -238,20 +232,24 @@ model AuctionExtension {
   triggerTime DateTime
   oldEndTime  DateTime
   newEndTime  DateTime
+
+  // ⚠ Ensure in service:
+  // newEndTime <= RFQ.forcedCloseTime
 }
 
 model Notification {
-  id        String           @id @default(uuid())
-  userId    String
-  user      User             @relation(fields: [userId], references: [id])
-  rfqId     String?
-  rfq       RFQ?             @relation(fields: [rfqId], references: [id], onDelete: SetNull)
-  type      NotificationType
-  title     String
-  message   String
-  isRead    Boolean          @default(false)
-  metadata  Json?
-  createdAt DateTime         @default(now())
+  id            String           @id @default(uuid())
+  userId        String
+  user          User             @relation(fields: [userId], references: [id])
+  rfqId         String?
+  rfq           RFQ?             @relation(fields: [rfqId], references: [id], onDelete: SetNull)
+  type          NotificationType
+  title         String
+  message       String
+  isRead        Boolean          @default(false)
+  metadata      Json?
+  correlationId String?
+  createdAt     DateTime         @default(now())
 
   @@index([userId, isRead])
 }
