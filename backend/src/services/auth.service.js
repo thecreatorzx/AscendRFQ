@@ -2,6 +2,18 @@ import bcryptjs from "bcryptjs";
 import prisma from "../utils/db.js";
 import jwt from "jsonwebtoken";
 
+const generateToken = (user) => {
+  return jwt.sign(
+    {
+      userId: user.id,
+      name: user.name,
+      role: user.role,
+      companyId: user.companyId,
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: "1h" },
+  );
+};
 const register = async (name, email, password, role, companyId) => {
   const userExists = await prisma.user.findUnique({
     where: {
@@ -21,8 +33,9 @@ const register = async (name, email, password, role, companyId) => {
       companyId,
     },
   });
+  const token = generateToken(newUser);
   const { password: _, ...userWithoutPassword } = newUser;
-  return userWithoutPassword;
+  return { user: userWithoutPassword, token };
 };
 
 const login = async (email, password) => {
@@ -36,17 +49,10 @@ const login = async (email, password) => {
   if (!verifyPassword) {
     throw new Error("Wrong Credentials");
   }
-  const token = jwt.sign(
-    {
-      userId: user.id,
-      name: user.name,
-      role: user.role,
-      companyId: user.companyId,
-    },
-    process.env.JWT_SECRET,
-    { expiresIn: "1h" },
-  );
+  const token = generateToken(user);
+
   const { password: _, ...userWithoutPassword } = user;
+
   return { token, user: userWithoutPassword };
 };
 

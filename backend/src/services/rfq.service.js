@@ -18,8 +18,7 @@ const createRFQ = async (rfqData) => {
     extensionEnabled,
     autoBidEnabled,
   } = rfqData;
-
-  return await prisma.rfq.create({
+  return await prisma.rFQ.create({
     data: {
       name,
       buyerId,
@@ -49,8 +48,9 @@ const createRFQ = async (rfqData) => {
   });
 };
 
-const getRFQs = async () => {
-  return await prisma.rfq.findMany({
+const getRFQs = async (status) => {
+  return await prisma.rFQ.findMany({
+    where: status ? { status } : {},
     include: {
       config: true,
     },
@@ -58,7 +58,7 @@ const getRFQs = async () => {
   });
 };
 const getRFQById = async (id) => {
-  const rfq = await prisma.rfq.findUnique({
+  const rfq = await prisma.rFQ.findUnique({
     where: {
       id,
     },
@@ -68,8 +68,13 @@ const getRFQById = async (id) => {
   return rfq;
 };
 
-const updateRFQStatus = async (id, status) => {
-  return await prisma.rfq.update({
+const updateRFQStatus = async (id, buyerId, status) => {
+  const rfq = await prisma.rFQ.findUnique({
+    where: { id: id },
+  });
+  if (!rfq) throw new Error("RFQ not found");
+  if (rfq.buyerId !== buyerId) throw new Error("Unauthorized");
+  return await prisma.rFQ.update({
     where: {
       id,
     },
