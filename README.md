@@ -16,6 +16,8 @@ A real-time Request for Quotation (RFQ) platform with British Auction–style bi
 - [Database Schema](#database-schema)
 - [Real-time Events](#real-time-events)
 - [Project Structure](#project-structure)
+- [Documentation & Resources](#documentation--resources)
+- [What's Next](#whats-next)
 
 ---
 
@@ -130,11 +132,7 @@ npm install
 
 ### 3. Set up environment variables
 
-```bash
-cp .env.example .env
-```
-
-Fill in your values (see [Environment Variables](#environment-variables) below).
+Create a `.env` file in the `/backend` directory and fill in your values (see [Environment Variables](#environment-variables) below).
 
 ### 4. Set up the database
 
@@ -364,6 +362,63 @@ Import the Postman collection from `/docs/british_auction_postman.json`
 5. Check rankings
 6. Check activity log
 7. Close auction
+
+---
+
+## Documentation & Resources
+
+All planning, design, and testing resources are in the `/docs` folder:
+
+```
+docs/
+├── diagrams/
+│   ├── RFQ_ERdiagram.png                   # Entity Relationship diagram of all DB tables
+│   └── RFQ_HLdiagram.png                   # High Level architecture diagram
+├── Architecture_Plan_Handwritten.pdf        # Handwritten planning notes covering schema,
+│                                            # API endpoints, folder structure and auction
+│                                            # engine design — done before writing code
+├── architecture.md                          # Written architecture overview covering HLD,
+│                                            # tech decisions, and system design rationale
+├── [Assignment] British Auction in          # Original assignment brief with all
+│   RFQ System.pdf                           # requirements and deliverables
+└── british_auction_postman.json             # Complete Postman collection with all 17+
+                                             # API endpoints, auto-variable capture,
+                                             # happy path flows, and error case testing
+```
+
+---
+
+## What's Next
+
+Features planned for future iterations:
+
+### Admin Panel
+
+- User management — view, disable, change roles
+- Platform-wide RFQ oversight across all buyers
+- System health and audit trail access
+
+### Notifications
+
+- In-app notifications already modelled in DB (`Notification` table)
+- Email notifications on invite, outbid, auction close events
+- Push notification support via WebSocket already in place — needs frontend wiring
+
+### Quote Details Enhancement
+
+- Full quote breakdown visible per supplier on auction details page
+- Quote version history — track how a supplier's charges changed across bids
+- Quote comparison view for buyers to evaluate beyond just price
+
+### Minor Improvements
+
+- Minimum bid decrement enforcement (`minDecrement` already in config, validation not yet enforced)
+- Auto-bid feature (`autoBidEnabled` in config, logic not yet implemented)
+- Max extensions cap (`maxExtensions` stored, not yet enforced in engine)
+- Metrics endpoint — bids per RFQ, average price improvement, extension frequency
+- Zod validation middleware on all request bodies
+- Refresh token support for longer sessions
+- Rate limiting on bid submission endpoints
 
 ---
 
