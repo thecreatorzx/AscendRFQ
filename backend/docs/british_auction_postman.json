@@ -1,0 +1,1095 @@
+{
+  "info": {
+    "_postman_id": "e845ad76-175a-44c1-ac3a-b9027bc58bbe",
+    "name": "British Auction RFQ System",
+    "description": "Complete API collection for British Auction RFQ System.\n\nSETUP:\n\n1. Set base_url variable to [http://localhost:5000](http://localhost:5000)\n    \n2. Run 'Register Buyer' first\n    \n3. Run 'Login Buyer' - cookie is set automatically\n    \n4. Follow the numbered order in each folder",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "33908256"
+  },
+  "item": [
+    {
+      "name": "🔧 Health Check",
+      "item": [
+        {
+          "name": "Health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔐 Auth",
+      "item": [
+        {
+          "name": "1. Register Buyer",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.user) pm.collectionVariables.set('buyer_id', res.user.id);"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Alice Buyer\",\n  \"email\": \"buyer@test.com\",\n  \"password\": \"Password123\",\n  \"role\": \"BUYER\",\n  \"companyId\": \"{{company_id_buyer}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Register Supplier 1",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.user) pm.collectionVariables.set('supplier_id', res.user.id);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bob Supplier\",\n  \"email\": \"supplier1@test.com\",\n  \"password\": \"Password123\",\n  \"role\": \"SUPPLIER\",\n  \"companyId\": \"{{company_id_supplier}}\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Register Supplier 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Carol Supplier\",\n  \"email\": \"supplier2@test.com\",\n  \"password\": \"Password123\",\n  \"role\": \"SUPPLIER\",\n  \"companyId\": \"company-supplier-002\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Register Supplier 3",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Dave Supplier\",\n  \"email\": \"supplier3@test.com\",\n  \"password\": \"Password123\",\n  \"role\": \"SUPPLIER\",\n  \"companyId\": \"company-supplier-003\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Login Buyer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"buyer@test.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Login Supplier 1",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"supplier1@test.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Login Supplier 2",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"supplier2@test.com\",\n  \"password\": \"Password123\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Logout",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/auth/logout",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "logout"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "📋 RFQ",
+      "item": [
+        {
+          "name": "1. Create RFQ (BID_RECEIVED trigger)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.id) pm.collectionVariables.set('rfq_id', res.data.id);",
+                  "console.log('RFQ ID set:', pm.collectionVariables.get('rfq_id'));"
+                ],
+                "type": "text/javascript",
+                "packages": {},
+                "requests": {}
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Delhi to Mumbai Shipment Q1\",\n  \"startTime\": \"2026-04-27T09:00:00.000Z\",\n  \"bidCloseTime\": \"2026-04-27T18:00:00.000Z\",\n  \"forcedCloseTime\": \"2026-04-27T19:00:00.000Z\",\n  \"initialPrice\": 100000,\n  \"currency\": \"INR\",\n  \"pickupDate\": \"2026-05-01T09:00:00.000Z\",\n  \"extensionWindow\": 10,\n  \"extensionDuration\": 5,\n  \"extensionType\": \"BID_RECEIVED\",\n  \"extensionEnabled\": true,\n  \"minDecrement\": 500,\n  \"autoBidEnabled\": false,\n  \"maxExtensions\": 5\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Create RFQ (ANY_RANK_CHANGE trigger)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Mumbai to Chennai Bulk Cargo\",\n  \"startTime\": \"2026-04-27T10:00:00.000Z\",\n  \"bidCloseTime\": \"2026-04-27T17:00:00.000Z\",\n  \"forcedCloseTime\": \"2026-04-27T18:30:00.000Z\",\n  \"initialPrice\": 75000,\n  \"currency\": \"INR\",\n  \"pickupDate\": \"2026-05-03T10:00:00.000Z\",\n  \"extensionWindow\": 15,\n  \"extensionDuration\": 10,\n  \"extensionType\": \"ANY_RANK_CHANGE\",\n  \"extensionEnabled\": true,\n  \"minDecrement\": 1000,\n  \"autoBidEnabled\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Create RFQ (L1_CHANGE trigger)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Bangalore to Hyderabad Express\",\n  \"startTime\": \"2026-04-27T11:00:00.000Z\",\n  \"bidCloseTime\": \"2026-04-27T16:00:00.000Z\",\n  \"forcedCloseTime\": \"2026-04-27T17:00:00.000Z\",\n  \"initialPrice\": 50000,\n  \"currency\": \"INR\",\n  \"pickupDate\": \"2026-05-05T08:00:00.000Z\",\n  \"extensionWindow\": 5,\n  \"extensionDuration\": 3,\n  \"extensionType\": \"L1_CHANGE\",\n  \"extensionEnabled\": true,\n  \"minDecrement\": 250,\n  \"autoBidEnabled\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Get All RFQs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Get All RFQs (filter ACTIVE)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "?status=ACTIVE",
+              "query": [
+                {
+                  "key": "status",
+                  "value": "ACTIVE"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Get All RFQs (filter DRAFT)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "?status=DRAFT",
+              "query": [
+                {
+                  "key": "status",
+                  "value": "DRAFT"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Get RFQ by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "8. Update RFQ Status → ACTIVE",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACTIVE\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "9. Update RFQ Status → DRAFT",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"DRAFT\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/status",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "status"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "10. Get RFQ Activity Log",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/activity",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "activity"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "👥 Suppliers",
+      "item": [
+        {
+          "name": "1. Invite Suppliers (bulk)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"supplierIds\": [\"{{supplier_id}}\"]\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/suppliers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "suppliers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Get All Suppliers for RFQ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/suppliers",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "suppliers"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Get Supplier by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/suppliers/{{supplier_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "suppliers",
+                "{{supplier_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Supplier Accepts Invite",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"ACCEPTED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/suppliers/{{supplier_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "suppliers",
+                "{{supplier_id}}"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Supplier Rejects Invite",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"status\": \"REJECTED\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/suppliers/{{supplier_id}}",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "suppliers",
+                "{{supplier_id}}"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "💰 Bids",
+      "item": [
+        {
+          "name": "1. Submit Bid - Supplier 1 (High Price)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "const res = pm.response.json();",
+                  "if (res.data && res.data.bidId) pm.collectionVariables.set('bid_id', res.data.bidId);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 48000,\n  \"carrierName\": \"DHL Express\",\n  \"freightCharges\": 35000,\n  \"originCharges\": 6000,\n  \"destinationCharges\": 7000,\n  \"transitTime\": 3,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Submit Bid - Supplier 1 (Lower Price)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 44000,\n  \"carrierName\": \"DHL Express\",\n  \"freightCharges\": 32000,\n  \"originCharges\": 6000,\n  \"destinationCharges\": 6000,\n  \"transitTime\": 3,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "3. Submit Bid - Supplier 2 (Undercuts Supplier 1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 41000,\n  \"carrierName\": \"Blue Dart\",\n  \"freightCharges\": 30000,\n  \"originCharges\": 5500,\n  \"destinationCharges\": 5500,\n  \"transitTime\": 4,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "4. Submit Bid - Supplier 3 (Becomes L1)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 38500,\n  \"carrierName\": \"FedEx India\",\n  \"freightCharges\": 28000,\n  \"originCharges\": 5000,\n  \"destinationCharges\": 5500,\n  \"transitTime\": 2,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "5. Submit Invalid Bid (Auction Closed - should fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 35000,\n  \"carrierName\": \"Test Carrier\",\n  \"freightCharges\": 25000,\n  \"originCharges\": 5000,\n  \"destinationCharges\": 5000,\n  \"transitTime\": 3,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "6. Get All Bids for RFQ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "7. Get Rankings for RFQ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids/rankings",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids",
+                "rankings"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "🔨 Auction Control",
+      "item": [
+        {
+          "name": "1. Close Auction (Normal)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/close",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "close"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "2. Force Close Auction",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/force-close",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "force-close"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "❌ Error Cases",
+      "item": [
+        {
+          "name": "Register - Missing Fields",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"incomplete@test.com\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/register",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "register"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login - Wrong Password",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"email\": \"buyer@test.com\",\n  \"password\": \"wrongpassword\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/auth/login",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Get RFQ - Invalid ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/nonexistent-id-123",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "nonexistent-id-123"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Submit Bid - Not Authenticated",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"bidAmount\": 30000,\n  \"carrierName\": \"Test\",\n  \"freightCharges\": 20000,\n  \"originCharges\": 5000,\n  \"destinationCharges\": 5000,\n  \"transitTime\": 3,\n  \"validityDate\": \"2026-05-10T00:00:00.000Z\"\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs/{{rfq_id}}/bids",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs",
+                "{{rfq_id}}",
+                "bids"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Create RFQ - Supplier trying (should fail)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Unauthorized RFQ\",\n  \"startTime\": \"2026-04-27T09:00:00.000Z\",\n  \"bidCloseTime\": \"2026-04-27T18:00:00.000Z\",\n  \"forcedCloseTime\": \"2026-04-27T19:00:00.000Z\",\n  \"initialPrice\": 50000,\n  \"currency\": \"INR\",\n  \"pickupDate\": \"2026-05-01T09:00:00.000Z\",\n  \"extensionWindow\": 10,\n  \"extensionDuration\": 5,\n  \"extensionType\": \"BID_RECEIVED\",\n  \"extensionEnabled\": true,\n  \"minDecrement\": 500,\n  \"autoBidEnabled\": false\n}"
+            },
+            "url": {
+              "raw": "{{base_url}}/api/rfqs",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "api",
+                "rfqs"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:5000",
+      "type": "string"
+    },
+    {
+      "key": "rfq_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "bid_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "supplier_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "buyer_id",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "company_id_buyer",
+      "value": "company-buyer-001",
+      "type": "string"
+    },
+    {
+      "key": "company_id_supplier",
+      "value": "company-supplier-001",
+      "type": "string"
+    }
+  ]
+}

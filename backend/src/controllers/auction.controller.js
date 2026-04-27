@@ -1,7 +1,7 @@
 import {
   closeAuction as close,
   forceCloseAuction as forceClose,
-} from "../services/auction.service";
+} from "../services/auction.service.js";
 
 const closeAuction = async (req, res, next) => {
   try {

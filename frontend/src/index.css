@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+@theme {
+  /* ── Text scale ─────────────────────────────── */
+  --color-ink:   #0f0f0f;
+  --color-ink-3: #6b7280;
+  --color-ink-4: #9ca3af;
+
+  /* ── Surface scale ──────────────────────────── */
+  --color-surface-1: #f9fafb;
+  --color-surface-2: #f3f4f6;
+  --color-surface-3: #e5e7eb;
+
+  /* ── Bid (green) ────────────────────────────── */
+  --color-bid:       #16a34a;
+  --color-bid-light: #dcfce7;
+
+  /* ── Warn (amber) ───────────────────────────── */
+  --color-warn:       #d97706;
+  --color-warn-light: #fef3c7;
+
+  /* ── Close (red) ────────────────────────────── */
+  --color-close:       #dc2626;
+  --color-close-light: #fee2e2;
+
+  /* ── Draft (purple) ─────────────────────────── */
+  --color-draft:       #7c3aed;
+  --color-draft-light: #ede9fe;
+
+  /* ── Custom font size ───────────────────────── */
+  --font-size-2xs: 0.65rem;
+  --line-height-2xs: 1rem;
+}

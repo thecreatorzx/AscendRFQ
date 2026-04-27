@@ -1,5 +1,12 @@
 import prisma from "../utils/db.js";
 
+const getAllSuppliers = async (req, res, next) => {
+  const suppliers = await prisma.user.findMany({
+    where: { role: "SUPPLIER" },
+    select: { id: true, name: true, email: true },
+  });
+  return suppliers;
+};
 const getSuppliers = async (rfqId) => {
   const suppliers = await prisma.rFQSupplier.findMany({
     where: {
@@ -7,8 +14,6 @@ const getSuppliers = async (rfqId) => {
     },
     orderBy: { lastActivityAt: "desc" },
   });
-  if (!suppliers || suppliers.length === 0)
-    throw new Error("The supplier doesn't exist in this RFQ");
   return suppliers;
 };
 
@@ -47,6 +52,7 @@ const updateSupplierStatus = async (rfqId, suppplierId, status) => {
 };
 
 export {
+  getAllSuppliers,
   getSuppliers,
   getSupplierBySupplierId,
   inviteSuppliers,

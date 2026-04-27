@@ -2,10 +2,10 @@ import express from "express";
 import {
   closeAuction,
   forceCloseAuction,
-} from "../controllers/auction.controller";
-import { authenticate, authorize } from "../middlewares/auth";
+} from "../controllers/auction.controller.js";
+import { authenticate, authorize } from "../middlewares/auth.js";
 
-const router = express.Router();
+const router = express.Router({ mergeParams: true });
 
 router.post("/close", authenticate, authorize("BUYER"), closeAuction);
 router.post(

@@ -1,9 +1,19 @@
 import {
+  getAllSuppliers as getAll,
   getSuppliers as get,
   getSupplierBySupplierId as getById,
   inviteSuppliers as invite,
   updateSupplierStatus as updateStatus,
-} from "../services/supplier.service";
+} from "../services/supplier.service.js";
+
+const getAllSuppliers = async (req, res, next) => {
+  try {
+    const suppliers = await getAll();
+    return res.json({ success: true, data: suppliers });
+  } catch (error) {
+    next(error);
+  }
+};
 
 const getSuppliers = async (req, res, next) => {
   try {
@@ -51,6 +61,7 @@ const updateSupplierStatus = async (req, res, next) => {
 };
 
 export {
+  getAllSuppliers,
   getSuppliers,
   getSupplierBySupplierId,
   inviteSuppliers,

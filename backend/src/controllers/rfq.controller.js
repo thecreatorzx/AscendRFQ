@@ -37,7 +37,7 @@ const createRFQ = async (req, res, next) => {
 
 const updateRFQStatus = async (req, res, next) => {
   try {
-    const { id } = req.params.id;
+    const id = req.params.id;
     const buyerId = req.user.userId;
     const { status } = req.body;
     const result = await updateStatus(id, buyerId, status);
@@ -49,8 +49,8 @@ const updateRFQStatus = async (req, res, next) => {
 
 const getLogs = async (req, res, next) => {
   try {
-    const logs = await logs(req.params.id);
-    res.json({ success: true, data: logs });
+    const activityLogs = await logs(req.params.id);
+    res.json({ success: true, data: activityLogs });
   } catch (error) {
     next(error);
   }

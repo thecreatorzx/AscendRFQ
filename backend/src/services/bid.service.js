@@ -50,7 +50,19 @@ const submitBid = async (rfqId, supplierId, bidData) => {
     createdAt: newBid.createdAt,
     quote: newBid.quote,
   });
-
+  await prisma.activityLog.create({
+    data: {
+      rfqId,
+      eventType: "BID_PLACED",
+      eventCategory: "BID",
+      actorId: supplierId,
+      actorType: "SUPPLIER",
+      newValue: {
+        bidId: newBid.bidId,
+        bidAmount: newBid.bidAmount,
+      },
+    },
+  });
   await checkAndExtend(rfq, newBid);
   return newBid;
 };

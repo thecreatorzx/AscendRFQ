@@ -8,13 +8,14 @@ import bidRoutes from "./routes/bid.route.js";
 import supplierRoutes from "./routes/supplier.route.js";
 import auctionRoutes from "./routes/auction.route.js";
 import errorHandler from "./middlewares/error.js";
+import { getAllSuppliers } from "./controllers/supplier.controller.js";
 
 const app = express();
 
 app.use(helmet());
 app.use(
   cors({
-    origin: "http://localhost:3000",
+    origin: "http://localhost:5173",
     credentials: true,
   }),
 );
@@ -27,7 +28,6 @@ app.use("/api/rfqs", rfqRoutes);
 app.use("/api/rfqs/:id", auctionRoutes);
 app.use("/api/rfqs/:id/bids", bidRoutes);
 app.use("/api/rfqs/:id/suppliers", supplierRoutes);
-
 app.get("/health", (req, res) => {
   res.json({ status: "ok" });
 });
